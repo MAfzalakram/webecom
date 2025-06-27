@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Information{% endblock %}
+
+{% block content %}
+{% if messages %}
+    <div class="container mt-2">
+      {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow border-0 rounded-4 animate__animated animate__fadeIn">
+                <div class="card-body p-5">
+                    <h2 class="text-center text-primary mb-4 fw-bold">
+                        <i class="bi bi-person-circle me-2"></i>Update Information
+                    </h2>
+                    
+                    <form method="POST" action="{% url 'updateProfile' %}">
+                        {% csrf_token %}
+                        
+                        {% for field in user_form %}
+                            <div class="mb-3">
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ field.errors|striptags }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-gradient-primary btn-lg rounded-pill shadow-sm">
+                                <i class="bi bi-arrow-repeat me-1"></i> Update Information
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

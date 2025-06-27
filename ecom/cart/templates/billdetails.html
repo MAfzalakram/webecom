@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}🧾 Bill Summary{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="mb-4 text-center display-6 fw-bold border-bottom pb-2">🧾 Bill Summary</h2>
+
+  {% if cart %}
+    <table class="table table-hover shadow-sm rounded-4">
+      <thead class="table-dark">
+        <tr>
+          <th>Product</th>
+          <th class="text-center">Price</th>
+          <th class="text-center">Quantity</th>
+          <th class="text-end">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart %}
+        <tr>
+          <td>{{ item.product.name }}</td>
+          <td class="text-center">
+            {% if item.product.is_sale  %}
+            Rs{{ item.product.sale_price }}
+            {% else %}
+            {{ item.product.price }}
+
+            {% endif %}
+          </td>
+          <td class="text-center">{{ item.quantity }}</td>
+          <td class="text-end">Rs{{ item.item_total }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot class="table-light">
+        <tr>
+          <td colspan="3" class="text-end fw-bold">Grand Total</td>
+          <td class="text-end fw-bold text-success">Rs{{ subtotal }}</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="d-flex justify-content-between mt-4">
+      <a href="{% url 'cartsummary' %}" class="btn btn-outline-secondary rounded-4">
+        ⬅️ Back to Cart
+      </a>
+      <a href="#" class="btn btn-success rounded-4">
+        ✅ Proceed to Checkout
+      </a>
+    </div>
+
+  {% else %}
+    <div class="alert alert-warning text-center">
+      <i class="bi bi-cart-x fs-3"></i><br>
+      Your cart is empty. <a href="{% url 'home' %}" class="fw-bold">Continue Shopping</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

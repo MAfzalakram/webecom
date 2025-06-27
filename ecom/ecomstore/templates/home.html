@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - EcomStore{% endblock %}
+
+{% block content %}
+  {% if messages %}
+    <div class="container mt-3">
+      {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Header -->
+  <header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5 text-center text-white">
+      <h1 class="display-4 fw-bold mb-2">Shop in Style</h1>
+      <p class="lead text-white-50">Discover quality products at unbeatable prices</p>
+    </div>
+  </header>
+
+  <!-- Product Section -->
+  <section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5 mt-4">
+      <div class="row gx-5 gy-5 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 justify-content-center">
+
+        {% for product in products %}
+          <div class="col">
+            <div class="card h-100 shadow-lg border-0 rounded-4">
+              <!-- Product image -->
+              <img class="card-img-top rounded-top-4" src="{{ product.image.url }}" alt="{{ product.name }}" style="height: 220px; object-fit: cover;">
+
+              <!-- Product details -->
+              <div class="card-body px-4 pt-4 pb-2 text-center">
+                <h5 class="fw-bold text-primary mb-2">{{ product.name }}</h5>
+
+                <!-- Guest message (prices hidden) -->
+                {% if not user.is_authenticated %}
+                  <p class="text-muted small bg-light rounded-3 px-3 py-2 d-inline-block shadow-sm mt-2">
+                    <i class="bi bi-lock-fill me-1 text-secondary"></i>
+                    Register or log in to view prices
+                  </p>
+                {% else %}
+                  {% if product.is_sale %}
+                    <p class="mb-0">
+                      <span class="text-muted text-decoration-line-through me-2">Rs. {{ product.price }}</span>
+                      <span class="fw-bold text-success">Rs. {{ product.sale_price }}</span>
+                    </p>
+                  {% else %}
+                    <p class="fw-semibold text-danger">Rs. {{ product.price }}</p>
+                  {% endif %}
+                {% endif %}
+              </div>
+
+              <!-- Product actions -->
+              <div class="card-footer bg-transparent border-0 text-center pb-4">
+                <a href="{% url 'product' product.id %}" class="btn btn-outline-primary rounded-pill px-4 shadow-sm">
+                  <i class="bi bi-eye-fill me-1"></i>View Product
+                </a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+
+      </div>
+    </div>
+  </section>
+{% endblock %}

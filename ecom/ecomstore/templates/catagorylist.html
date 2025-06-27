@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Categories List{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-primary">Welcome to Categories List</h1>
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center flex-wrap gap-3">
+        {% for catagory in catagories %}
+            <a href="{% url 'catagory' catagory.name %}" class="btn btn-outline-primary rounded-pill shadow-sm px-4 py-2 text-capitalize">
+                {{ catagory.name }}
+            </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

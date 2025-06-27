@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}🛒 Checkout{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center border-bottom pb-2">🛒 Final Checkout</h2>
+
+  <div class="alert alert-info">
+    <strong>Total:</strong> Rs{{ subtotal }}<br>
+    Please confirm your payment method and delivery details.
+  </div>
+
+  <form method="POST" action="{% url 'stripe_checkout' %}">
+    {% csrf_token %}
+    <!-- Simulate payment and address input -->
+    <div class="mb-3">
+      <label for="address" class="form-label">Delivery Address</label>
+      <textarea name="address" class="form-control" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">💳 Pay Now</button>
+  </form>
+</div>
+{% endblock %}

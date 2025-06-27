@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Product Page{% endblock %}
+
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} text-center shadow-sm rounded-4 mx-5 mt-3">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4">
+      <div class="row g-0">
+        <div class="col-md-6 d-flex align-items-center justify-content-center p-4">
+          <img src="{{ product.image.url }}" class="img-fluid rounded-3" alt="Product Image" style="max-height: 350px; object-fit: contain;">
+        </div>
+        <div class="col-md-6 p-5">
+          <div class="card-body">
+            <h2 class="fw-bold text-primary mb-3">{{ Product.name }}</h2>
+            <p class="text-muted mb-4">{{ product.description }}</p>
+        
+                  {% if product.is_sale %}
+                    <p class="mb-0">
+                      <span class="text-muted text-decoration-line-through me-2">Rs. {{ product.price }}</span>
+                      <span class="fw-bold text-success">Rs. {{ product.sale_price }}</span>
+                    </p>
+                  {% else %}
+                      <p class="fw-semibold text-danger">Rs. {{ product.price }}</p>
+                  {% endif %}
+              
+
+            <div class="mb-4" style="max-width: 150px;">
+              <label for="quantity" class="form-label fw-semibold">Quantity</label>
+              <select id="quantity" class="form-select">
+                {% for i in "12345" %}
+                <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="d-flex gap-3">
+              <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="bi bi-house-door-fill me-2"></i>Home
+              </a>
+              <button type="button" value="{{ product.id }}" class="btn btn-primary rounded-pill px-4" id="addcart">
+                <i class="bi bi-cart-plus-fill me-2"></i>Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).on("click", '#addcart', function(e){
+      e.preventDefault();
+      $.ajax({
+        type: "POST",
+        url: "{% url 'addToCart' %}",
+        data: {
+          product_id : $('#addcart').val().trim(),
+          quantity : $('#quantity').val(),
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          action: 'post'
+        },
+        success: function(json){
+          console.log("Ajax Success", json);
+          document.getElementById("total_qty").textContent = json.qty;
+          location.reload()
+        },
+        error: function(xhr, errmsg, err){
+          console.log(xhr.status + ": " + xhr.responseText);
+        }
+      });
+    });
+  </script>
+
+{% endblock %}

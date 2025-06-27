@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}User Registration{% endblock %}
+{% if messages %}
+    <div class="container mt-2">
+      {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg border-0 rounded-4 p-4" style="width: 100%; max-width: 500px;">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4 text-primary fw-bold">Update User Profille</h3>
+            
+            <form method="POST" action="{% url 'updateUser' %}">
+                {% csrf_token %}
+                
+                {% for field in user_form %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ field.errors|striptags }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill">
+                        Update
+                    </button>
+                </div>
+            </form>
+           
+        </div>
+         <div class="d-grid mt-4">
+            <a href="{% url 'updatePassword' %}" class="btn btn-outline-primary btn-lg rounded-pill text-center">
+                Update Password
+            </a>
+</div>
+    </div>
+</div>
+{% endblock %}
